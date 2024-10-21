@@ -21,7 +21,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 			<div class="_gaps_s">
 				<div v-for="user in users" :key="user.id" :class="$style.userItem">
 					<MkA :class="$style.userItemBody" :to="`${userPage(user)}`">
-						<MkUserCardMini :user="user"/>
+						<MkUserCardMini :user="user" withChart/>
 					</MkA>
 				</div>
 			</div>
@@ -109,7 +109,7 @@ definePageMetadata(() => ({
 
 <style lang="scss" module>
 .main {
-	min-height: calc(100cqh - (var(--stickyTop, 0px) + var(--stickyBottom, 0px)));
+	min-height: calc(100cqh - (var(--MI-stickyTop, 0px) + var(--MI-stickyBottom, 0px)));
 }
 
 .userItem {
