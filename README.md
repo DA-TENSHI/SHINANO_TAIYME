@@ -1,4 +1,4 @@
-# taiyme (taiy fork)
+# 信濃式taiyme改 (SHINANO taiyme fork)
 
 [信濃式taiyme改](https://github.com/DA-TENSHI/VRTL_with_taiyme)は[taiyme](https://github.com/taiyme/misskey)より派生したフォークです。
 
