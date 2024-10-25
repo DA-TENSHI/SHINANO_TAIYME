@@ -1,7 +1,7 @@
 {
 	"name": "misskey",
-	"version": "2024.10.1-taiyme.0",
-	"codename": "nasubi",
+	"version": "2024.10.1-taiyme.SHINANOMAI.0",
+	"codename": "ALFA",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/taiyme/misskey.git"
