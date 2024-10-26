@@ -45,6 +45,7 @@ const props = withDefaults(defineProps<{
 
 const emit = defineEmits<{
 	(ev: 'update:modelValue', v: boolean): void;
+	(ev: 'change', v: boolean): void;
 }>();
 
 const checked = computed(() => unref(props.modelValue));
@@ -54,7 +55,9 @@ const onKeydown = filterKeyboardEnterOrSpace(() => toggle());
 
 const toggle = () => {
 	if (disabled.value) return;
-	emit('update:modelValue', !checked.value);
+	const result = !checked.value;
+	emit('update:modelValue', result);
+	emit('change', result);
 };
 </script>
 
