@@ -3,10 +3,31 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
-import { defineAsyncComponent, Directive, ref } from 'vue';
+import { type ObjectDirective, defineAsyncComponent, ref } from 'vue';
 import { popup } from '@/os.js';
 
-export class UserPreview {
+type VUserPreview = ObjectDirective<HTMLElement, string | null | undefined>;
+
+export const vUserPreview = {
+	async mounted(src, binding) {
+		if (binding.value == null) return;
+
+		// TODO: 新たにプロパティを作るのをやめMapを使う
+		// ただメモリ的には↓の方が省メモリかもしれないので検討中
+		const self = (src as any)._userPreviewDirective_ = {} as any;
+
+		self.preview = new UserPreview(src, binding.value);
+	},
+
+	async unmounted(src, binding) {
+		if (binding.value == null) return;
+
+		const self = src._userPreviewDirective_;
+		self.preview.detach();
+	},
+} satisfies VUserPreview as VUserPreview;
+
+class UserPreview {
 	private el;
 	private user;
 	private showTimer;
@@ -102,23 +123,3 @@ export class UserPreview {
 		this.el.removeEventListener('click', this.onClick);
 	}
 }
-
-// eslint-disable-next-line import/no-default-export
-export default {
-	mounted(el: HTMLElement, binding, vn) {
-		if (binding.value == null) return;
-
-		// TODO: 新たにプロパティを作るのをやめMapを使う
-		// ただメモリ的には↓の方が省メモリかもしれないので検討中
-		const self = (el as any)._userPreviewDirective_ = {} as any;
-
-		self.preview = new UserPreview(el, binding.value);
-	},
-
-	unmounted(el, binding, vn) {
-		if (binding.value == null) return;
-
-		const self = el._userPreviewDirective_;
-		self.preview.detach();
-	},
-} as Directive;

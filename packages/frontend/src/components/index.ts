@@ -3,30 +3,30 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
-import { App } from 'vue';
+import type { App } from 'vue';
 
-import Mfm from './global/MkMfm.js';
-import MkA from './global/MkA.vue';
-import MkAcct from './global/MkAcct.vue';
-import MkAvatar from './global/MkAvatar.vue';
-import MkEmoji from './global/MkEmoji.vue';
-import MkCondensedLine from './global/MkCondensedLine.vue';
-import MkCustomEmoji from './global/MkCustomEmoji.vue';
-import MkUserName from './global/MkUserName.vue';
-import MkEllipsis from './global/MkEllipsis.vue';
-import MkTime from './global/MkTime.vue';
-import MkUrl from './global/MkUrl.vue';
-import I18n from './global/I18n.vue';
-import RouterView from './global/RouterView.vue';
-import MkLoading from './global/MkLoading.vue';
-import MkError from './global/MkError.vue';
-import MkAd from './global/MkAd.vue';
-import MkPageHeader from './global/MkPageHeader.vue';
-import MkSpacer from './global/MkSpacer.vue';
-import MkFooterSpacer from './global/MkFooterSpacer.vue';
-import MkStickyContainer from './global/MkStickyContainer.vue';
-import MkLazy from './global/MkLazy.vue';
-import TmsNoCache from './global/TmsNoCache.vue';
+import I18n from '@/components/global/I18n.vue';
+import RouterView from '@/components/global/RouterView.vue';
+import Mfm from '@/components/global/MkMfm.js';
+import MkA from '@/components/global/MkA.vue';
+import MkAcct from '@/components/global/MkAcct.vue';
+import MkAd from '@/components/global/MkAd.vue';
+import MkAvatar from '@/components/global/MkAvatar.vue';
+import MkCondensedLine from '@/components/global/MkCondensedLine.vue';
+import MkCustomEmoji from '@/components/global/MkCustomEmoji.vue';
+import MkEllipsis from '@/components/global/MkEllipsis.vue';
+import MkEmoji from '@/components/global/MkEmoji.vue';
+import MkError from '@/components/global/MkError.vue';
+import MkFooterSpacer from '@/components/global/MkFooterSpacer.vue';
+import MkLazy from '@/components/global/MkLazy.vue';
+import MkLoading from '@/components/global/MkLoading.vue';
+import MkPageHeader from '@/components/global/MkPageHeader.vue';
+import MkSpacer from '@/components/global/MkSpacer.vue';
+import MkStickyContainer from '@/components/global/MkStickyContainer.vue';
+import MkTime from '@/components/global/MkTime.vue';
+import MkUrl from '@/components/global/MkUrl.vue';
+import MkUserName from '@/components/global/MkUserName.vue';
+import TmsNoCache from '@/components/global/TmsNoCache.vue';
 
 // eslint-disable-next-line import/no-default-export
 export default function(app: App) {
@@ -36,29 +36,29 @@ export default function(app: App) {
 }
 
 export const components = {
-	I18n: I18n,
-	RouterView: RouterView,
-	Mfm: Mfm,
-	MkA: MkA,
-	MkAcct: MkAcct,
-	MkAvatar: MkAvatar,
-	MkEmoji: MkEmoji,
-	MkCondensedLine: MkCondensedLine,
-	MkCustomEmoji: MkCustomEmoji,
-	MkUserName: MkUserName,
-	MkEllipsis: MkEllipsis,
-	MkTime: MkTime,
-	MkUrl: MkUrl,
-	MkLoading: MkLoading,
-	MkError: MkError,
-	MkAd: MkAd,
-	MkPageHeader: MkPageHeader,
-	MkSpacer: MkSpacer,
-	MkFooterSpacer: MkFooterSpacer,
-	MkStickyContainer: MkStickyContainer,
-	MkLazy: MkLazy,
-	TmsNoCache: TmsNoCache,
-};
+	I18n,
+	RouterView,
+	Mfm,
+	MkA,
+	MkAcct,
+	MkAd,
+	MkAvatar,
+	MkCondensedLine,
+	MkCustomEmoji,
+	MkEllipsis,
+	MkEmoji,
+	MkError,
+	MkFooterSpacer,
+	MkLazy,
+	MkLoading,
+	MkPageHeader,
+	MkSpacer,
+	MkStickyContainer,
+	MkTime,
+	MkUrl,
+	MkUserName,
+	TmsNoCache,
+} as const;
 
 declare module '@vue/runtime-core' {
 	export interface GlobalComponents {
@@ -67,22 +67,22 @@ declare module '@vue/runtime-core' {
 		Mfm: typeof Mfm;
 		MkA: typeof MkA;
 		MkAcct: typeof MkAcct;
+		MkAd: typeof MkAd;
 		MkAvatar: typeof MkAvatar;
-		MkEmoji: typeof MkEmoji;
 		MkCondensedLine: typeof MkCondensedLine;
 		MkCustomEmoji: typeof MkCustomEmoji;
-		MkUserName: typeof MkUserName;
 		MkEllipsis: typeof MkEllipsis;
-		MkTime: typeof MkTime;
-		MkUrl: typeof MkUrl;
-		MkLoading: typeof MkLoading;
+		MkEmoji: typeof MkEmoji;
 		MkError: typeof MkError;
-		MkAd: typeof MkAd;
+		MkFooterSpacer: typeof MkFooterSpacer;
+		MkLazy: typeof MkLazy;
+		MkLoading: typeof MkLoading;
 		MkPageHeader: typeof MkPageHeader;
 		MkSpacer: typeof MkSpacer;
-		MkFooterSpacer: typeof MkFooterSpacer;
 		MkStickyContainer: typeof MkStickyContainer;
-		MkLazy: typeof MkLazy;
+		MkTime: typeof MkTime;
+		MkUrl: typeof MkUrl;
+		MkUserName: typeof MkUserName;
 		TmsNoCache: typeof TmsNoCache;
 	}
 }

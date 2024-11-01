@@ -3,12 +3,18 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
-import { Directive } from 'vue';
-import { getBgColor } from '@/scripts/tms/get-bg-color.js';
+import type { ObjectDirective } from 'vue';
 
-// eslint-disable-next-line import/no-default-export
-export default {
-	mounted(src, binding, vn) {
+type VAdaptiveBorder = ObjectDirective<HTMLElement, null | undefined>;
+
+export const vAdaptiveBorder = {
+	async mounted(src) {
+		const [
+			{ getBgColor },
+		] = await Promise.all([
+			import('@/scripts/tms/get-bg-color.js'),
+		]);
+
 		const parentBg = getBgColor(src.parentElement) ?? 'transparent';
 
 		const myBg = window.getComputedStyle(src).backgroundColor;
@@ -19,4 +25,4 @@ export default {
 			src.style.borderColor = myBg;
 		}
 	},
-} as Directive;
+} satisfies VAdaptiveBorder as VAdaptiveBorder;
