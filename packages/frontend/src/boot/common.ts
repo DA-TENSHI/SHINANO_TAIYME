@@ -6,9 +6,9 @@
 import { computed, watch, version as vueVersion, App } from 'vue';
 import { compareVersions } from 'compare-versions';
 import { version, lang, updateLocale, locale, commitHash } from '@@/js/config.js';
-import widgets from '@/widgets/index.js';
 import directives from '@/directives/index.js';
 import components from '@/components/index.js';
+import widgets from '@/widgets/index.js';
 import { applyTheme } from '@/scripts/theme.js';
 import { isDeviceDarkmode } from '@/scripts/is-device-darkmode.js';
 import { updateI18n } from '@/i18n.js';
@@ -257,9 +257,9 @@ export async function common(createVue: () => App<Element>) {
 		app.config.performance = true;
 	}
 
-	widgets(app);
 	directives(app);
 	components(app);
+	widgets(app);
 
 	// https://github.com/misskey-dev/misskey/pull/8575#issuecomment-1114239210
 	// なぜか2回実行されることがあるため、mountするdivを1つに制限する
