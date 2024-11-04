@@ -96,11 +96,6 @@ const props = defineProps<{
 			transparent 0px 10px,
 			var(--MI_THEME-bg) 6px 16px
 		);
-
-		// NOTE: iOS/iPadOS環境でクラッシュする https://github.com/taiyme/misskey/issues/293
-		html[data-browser-engine=webkit] & {
-			background-image: unset !important;
-		}
 	}
 
 	@media (max-width: 700px) {
