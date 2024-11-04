@@ -46,6 +46,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 
 <script lang="ts" setup>
 import { shallowRef, ref, computed } from 'vue';
+import * as Misskey from 'misskey-js';
 import MkButton from '@/components/MkButton.vue';
 import MkModalWindow from '@/components/MkModalWindow.vue';
 import MkSwitch from '@/components/MkSwitch.vue';
@@ -53,39 +54,32 @@ import { i18n } from '@/i18n.js';
 import MkRange from '@/components/MkRange.vue';
 import { signinRequired } from '@/account.js';
 
+type AvatarDecoration = Misskey.entities.GetAvatarDecorationsResponse[number];
+type AvatarDecorationWithPosition = Omit<Misskey.entities.UserDetailed['avatarDecorations'][number], 'id' | 'url'>;
+
 const $i = signinRequired();
 
 const props = defineProps<{
 	usingIndex: number | null;
-	decoration: {
-		id: string;
-		url: string;
-		name: string;
-	};
+	decoration: AvatarDecoration;
 }>();
 
 const emit = defineEmits<{
 	(ev: 'closed'): void;
-	(ev: 'attach', payload: {
-		angle: number;
-		flipH: boolean;
-		offsetX: number;
-		offsetY: number;
-	}): void;
-	(ev: 'update', payload: {
-		angle: number;
-		flipH: boolean;
-		offsetX: number;
-		offsetY: number;
-	}): void;
+	(ev: 'attach', payload: AvatarDecorationWithPosition): void;
+	(ev: 'update', payload: AvatarDecorationWithPosition): void;
 	(ev: 'detach'): void;
 }>();
 
 const dialog = shallowRef<InstanceType<typeof MkModalWindow>>();
 const exceeded = computed(() => ($i.policies.avatarDecorationLimit - $i.avatarDecorations.length) <= 0);
+// eslint-disable-next-line vue/no-setup-props-reactivity-loss
 const angle = ref((props.usingIndex != null ? $i.avatarDecorations[props.usingIndex].angle : null) ?? 0);
+// eslint-disable-next-line vue/no-setup-props-reactivity-loss
 const flipH = ref((props.usingIndex != null ? $i.avatarDecorations[props.usingIndex].flipH : null) ?? false);
+// eslint-disable-next-line vue/no-setup-props-reactivity-loss
 const offsetX = ref((props.usingIndex != null ? $i.avatarDecorations[props.usingIndex].offsetX : null) ?? 0);
+// eslint-disable-next-line vue/no-setup-props-reactivity-loss
 const offsetY = ref((props.usingIndex != null ? $i.avatarDecorations[props.usingIndex].offsetY : null) ?? 0);
 
 const decorationsForPreview = computed(() => {
@@ -108,7 +102,7 @@ const decorationsForPreview = computed(() => {
 });
 
 function cancel() {
-	dialog.value.close();
+	dialog.value?.close();
 }
 
 async function update() {
@@ -118,7 +112,7 @@ async function update() {
 		offsetX: offsetX.value,
 		offsetY: offsetY.value,
 	});
-	dialog.value.close();
+	dialog.value?.close();
 }
 
 async function attach() {
@@ -128,12 +122,12 @@ async function attach() {
 		offsetX: offsetX.value,
 		offsetY: offsetY.value,
 	});
-	dialog.value.close();
+	dialog.value?.close();
 }
 
 async function detach() {
 	emit('detach');
-	dialog.value.close();
+	dialog.value?.close();
 }
 </script>
 
