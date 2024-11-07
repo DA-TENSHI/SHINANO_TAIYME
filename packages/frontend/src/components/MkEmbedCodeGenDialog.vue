@@ -313,11 +313,6 @@ onUnmounted(() => {
 		transparent 0px 10px,
 		var(--MI_THEME-panel) 6px 16px
 	);
-
-	// NOTE: iOS/iPadOS環境でクラッシュする https://github.com/taiyme/misskey/issues/293
-	html[data-browser-engine=webkit] & {
-		background-image: unset !important;
-	}
 }
 
 .embedCodeGenPreviewWrapper {

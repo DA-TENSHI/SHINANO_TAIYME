@@ -75,7 +75,7 @@ function more() {
 
 <style lang="scss" module>
 .root {
-	--nav-bg-transparent: color(from var(--MI_THEME-navBg) srgb r g b / 0.5);
+	--nav-bg-transparent: rgb(from var(--MI_THEME-navBg) r g b / 0.5);
 
 	display: flex;
 	flex-direction: column;
