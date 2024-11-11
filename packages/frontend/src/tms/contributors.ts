@@ -44,4 +44,5 @@ export const patrons = [
 	'Yagileo',
 	'nanasina',
 	'すい',
+	'ポンの助',
 ] as const satisfies Patron[];
