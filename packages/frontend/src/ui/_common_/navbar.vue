@@ -104,7 +104,7 @@ function more(ev: MouseEvent) {
 .root {
 	--nav-width: 250px;
 	--nav-icon-only-width: 80px;
-	--nav-bg-transparent: color(from var(--MI_THEME-navBg) srgb r g b / 0.5);
+	--nav-bg-transparent: rgb(from var(--MI_THEME-navBg) r g b / 0.5);
 
 	flex: 0 0 var(--nav-width);
 	width: var(--nav-width);

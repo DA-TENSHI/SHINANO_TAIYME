@@ -72,11 +72,11 @@ const avatarUrlRef = computed(() => {
 	padding: 4px 8px 4px 4px;
 	border-radius: 999px;
 	color: var(--MI_THEME-mention);
-	background: color(from var(--MI_THEME-mention) srgb r g b / 0.1);
+	background: rgb(from var(--MI_THEME-mention) r g b / 0.1);
 
 	&.isMe {
 		color: var(--MI_THEME-mentionMe);
-		background: color(from var(--MI_THEME-mentionMe) srgb r g b / 0.1);
+		background: rgb(from var(--MI_THEME-mentionMe) r g b / 0.1);
 	}
 }
 
