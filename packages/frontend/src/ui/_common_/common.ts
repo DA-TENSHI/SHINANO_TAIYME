@@ -158,7 +158,7 @@ export function openInstanceMenu(ev: MouseEvent) {
 	}, {
 		type: 'link',
 		text: i18n.ts._tms.taiymeFeatures,
-		icon: 'ti ti-settings',
+		icon: 'ti ti-settings-plus',
 		to: '/tms/features',
 	});
 
