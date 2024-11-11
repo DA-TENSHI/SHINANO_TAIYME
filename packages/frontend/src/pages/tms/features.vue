@@ -33,6 +33,6 @@ const XFeaturesForm = defineAsyncComponent(() => import('@/pages/tms/features.fo
 
 definePageMetadata(() => ({
 	title: i18n.ts._tms.taiymeFeatures,
-	icon: 'ti ti-settings',
+	icon: 'ti ti-settings-plus',
 }));
 </script>
