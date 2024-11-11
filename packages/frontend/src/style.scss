@@ -383,6 +383,8 @@ rt {
 	border: solid 1px var(--MI_THEME-accent);
 	border-radius: 4px;
 	vertical-align: top;
+	display: inline-block;
+	line-height: 1;
 }
 
 ._modified {
@@ -393,6 +395,8 @@ rt {
 	border: solid 1px var(--MI_THEME-warn);
 	border-radius: 4px;
 	vertical-align: top;
+	display: inline-block;
+	line-height: 1;
 }
 
 ._table {
