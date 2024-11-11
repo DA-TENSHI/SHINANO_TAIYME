@@ -157,9 +157,9 @@ export function openInstanceMenu(ev: MouseEvent) {
 		to: '/tms/about',
 	}, {
 		type: 'link',
-		text: i18n.ts._tms.taiymeSettings,
+		text: i18n.ts._tms.taiymeFeatures,
 		icon: 'ti ti-settings',
-		to: '/tms/settings',
+		to: '/tms/features',
 	});
 
 	os.popupMenu(menuItems, ev.currentTarget ?? ev.target, {
