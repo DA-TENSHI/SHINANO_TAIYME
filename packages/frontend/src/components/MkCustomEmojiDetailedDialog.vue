@@ -94,6 +94,7 @@ const cancel = () => {
 		var(--c) 6px 16px
 	);
 
+
 	&,
 	html[data-color-scheme=light] & {
 		--c: rgb(0 0 0 / 0.02);

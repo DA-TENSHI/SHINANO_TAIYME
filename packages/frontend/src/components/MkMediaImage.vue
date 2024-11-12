@@ -40,7 +40,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 					:style="hideRef ? 'filter: brightness(0.7);' : undefined"
 				/>
 			</component>
-
+	
 			<template v-if="hideRef">
 				<div :class="['_noSelect', $style.hideInfo]">
 					<div :class="$style.hideInfoItem">
@@ -63,7 +63,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 					</div>
 				</div>
 			</template>
-
+	
 			<template v-else-if="props.controls">
 				<div :class="$style.controlsUpperRight">
 					<button
@@ -75,7 +75,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 						<div :class="$style.controlButton"><i class="ti ti-eye-off"></i></div>
 					</button>
 				</div>
-
+	
 				<div :class="$style.controlsLowerRight">
 					<button
 						:class="['_button', $style.controlItem]"
@@ -86,7 +86,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 						<div :class="$style.controlButton"><i class="ti ti-dots"></i></div>
 					</button>
 				</div>
-
+	
 				<div :class="$style.controlsLowerLeft">
 					<button
 						v-if="imageRef.comment"
@@ -98,7 +98,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 						<div :class="$style.controlButton"><span>ALT</span></div>
 					</button>
 				</div>
-
+	
 				<div :class="$style.controlsUpperLeft">
 					<button
 						v-if="['image/gif', 'image/apng'].includes(imageRef.type)"
@@ -123,7 +123,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 		</div>
 	</div>
 	</template>
-
+	
 	<script lang="ts" setup>
 	import { computed, inject } from 'vue';
 	import type * as Misskey from 'misskey-js';
@@ -135,7 +135,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 	import { useReactiveDriveFile } from '@/scripts/tms/use-reactive-drive-file.js';
 	import bytes from '@/filters/bytes.js';
 	import MkImgWithBlurhash from '@/components/MkImgWithBlurhash.vue';
-
+	
 	const props = withDefaults(defineProps<{
 		image: Misskey.entities.DriveFile;
 		raw?: boolean;
@@ -147,16 +147,16 @@ SPDX-License-Identifier: AGPL-3.0-only
 		disableImageLink: false,
 		controls: true,
 	});
-
+	
 	const mock = inject<boolean>('mock', false);
-
+	
 	const {
 		reactiveDriveFile: imageRef,
 		reactiveHide: hideRef,
 		reactiveSensitive: sensitiveRef,
 		reactiveIAmOwner: iAmOwnerRef,
 	} = useReactiveDriveFile(() => props.image);
-
+	
 	const imageUrlRef = computed(() => {
 		if (props.raw || defaultStore.state.loadRawImages) {
 			return imageRef.value.url;
@@ -166,7 +166,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 		}
 		return imageRef.value.thumbnailUrl;
 	});
-
+	
 	const showImage = async () => {
 		if (!props.controls || !hideRef.value) return;
 		if (sensitiveRef.value && defaultStore.state.confirmWhenRevealingSensitiveMedia) {
@@ -178,7 +178,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 		}
 		hideRef.value = false;
 	};
-
+	
 	const showImageMenu = (ev: MouseEvent) => {
 		popupMenu(getMediaMenu({
 			reactiveDriveFile: imageRef,
@@ -190,12 +190,12 @@ SPDX-License-Identifier: AGPL-3.0-only
 		}), ev.currentTarget ?? ev.target);
 	};
 	</script>
-
+	
 	<style lang="scss" module>
 	.cq {
 		container: mediaImage / inline-size;
 	}
-
+	
 	.root {
 		--mediaImage-scale: 1;
 		box-sizing: border-box;
@@ -205,12 +205,12 @@ SPDX-License-Identifier: AGPL-3.0-only
 		overflow: hidden; // fallback (overflow: clip)
 		overflow: clip;
 		border-radius: var(--mediaList-radius, 8px);
-
+	
 		&:focus-visible {
 			outline: none;
 		}
 	}
-
+	
 	.rootVisible {
 		background-color: var(--MI_THEME-bg);
 		background-image: repeating-linear-gradient(
@@ -218,17 +218,17 @@ SPDX-License-Identifier: AGPL-3.0-only
 			transparent 0px 10px,
 			var(--c) 6px 16px
 		);
-
+	
 		&,
 		html[data-color-scheme=light] & {
 			--c: color-mix(in srgb, #000000 3.75%, var(--MI_THEME-bg));
 		}
-
+	
 		html[data-color-scheme=dark] & {
 			--c: color-mix(in srgb, #ffffff 7.5%, var(--MI_THEME-bg));
 		}
 	}
-
+	
 	.rootSensitive {
 		&::after {
 			content: "";
@@ -242,7 +242,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 			box-shadow: inset 0 0 0 4px var(--MI_THEME-warn);
 		}
 	}
-
+	
 	.hideInfo {
 		position: absolute;
 		left: 0;
@@ -255,12 +255,12 @@ SPDX-License-Identifier: AGPL-3.0-only
 		justify-content: center;
 		align-items: center;
 		cursor: pointer;
-
+	
 		> .hideInfoItem {
 			max-width: 100%;
 		}
 	}
-
+	
 	%HideInfoText {
 		white-space: nowrap;
 		text-overflow: ellipsis;
@@ -268,16 +268,16 @@ SPDX-License-Identifier: AGPL-3.0-only
 		font-size: clamp(6px, calc(12px * var(--mediaImage-scale)), 12px);
 		color: #fff;
 	}
-
+	
 	.hideInfoTitle {
 		@extend %HideInfoText;
 		font-weight: 700;
 	}
-
+	
 	.hideInfoText {
 		@extend %HideInfoText;
 	}
-
+	
 	.imageContainer {
 		display: block;
 		overflow: hidden;
@@ -287,97 +287,97 @@ SPDX-License-Identifier: AGPL-3.0-only
 		background-size: contain;
 		background-repeat: no-repeat;
 	}
-
+	
 	%Controls {
 		position: absolute;
 		inset: auto;
 		display: flex;
-
+	
 		&:empty {
 			display: none;
 		}
 	}
-
+	
 	%ControlItem {
 		text-align: center;
 		font-size: clamp(6px, calc(12px * var(--mediaImage-scale)), 12px);
 		padding:
 			clamp(3px, calc(6px * var(--mediaImage-scale)), 6px)
 			clamp(2px, calc(4px * var(--mediaImage-scale)), 4px);
-
+	
 		&:first-child {
 			padding-left: clamp(4px, calc(8px * var(--mediaImage-scale)), 8px);
 		}
-
+	
 		&:last-child {
 			padding-right: clamp(4px, calc(8px * var(--mediaImage-scale)), 8px);
 		}
-
+	
 		&:focus-visible {
 			outline: none;
 		}
 	}
-
+	
 	.controlsUpperRight {
 		@extend %Controls;
 		top: 0;
 		right: 0;
-
+	
 		> .controlItem {
 			@extend %ControlItem;
 			padding-bottom: 0;
-
+	
 			&:first-child {
 				padding-left: 0;
 			}
 		}
 	}
-
+	
 	.controlsLowerRight {
 		@extend %Controls;
 		right: 0;
 		bottom: 0;
-
+	
 		> .controlItem {
 			@extend %ControlItem;
 			padding-top: 0;
-
+	
 			&:first-child {
 				padding-left: 0;
 			}
 		}
 	}
-
+	
 	.controlsLowerLeft {
 		@extend %Controls;
 		bottom: 0;
 		left: 0;
-
+	
 		> .controlItem {
 			@extend %ControlItem;
 			padding-top: 0;
-
+	
 			&:last-child {
 				padding-right: 0;
 			}
 		}
 	}
-
+	
 	.controlsUpperLeft {
 		@extend %Controls;
 		top: 0;
 		left: 0;
-
+	
 		> .controlItem {
 			@extend %ControlItem;
 			padding-bottom: 0;
-
+	
 			&:last-child {
 				padding-right: 0;
 			}
 		}
 	}
-
+	
 	.controlButton {
 		display: block;
 		border-radius: clamp(3px, calc(6px * var(--mediaImage-scale)), 6px);
@@ -387,57 +387,57 @@ SPDX-License-Identifier: AGPL-3.0-only
 		background-color: rgba(0, 0, 0, 0.5);
 		color: #fff;
 		transition: background-color 0.1s ease;
-
+	
 		&:hover {
 			background-color: rgba(0, 0, 0, 0.7);
 		}
 	}
-
+	
 	@container mediaImage (max-width: 250px) {
 		.root {
 			--mediaImage-scale: 0.90;
 		}
 	}
-
+	
 	@container mediaImage (max-width: 200px) {
 		.root {
 			--mediaImage-scale: 0.85;
 		}
 	}
-
+	
 	@container mediaImage (max-width: 150px) {
 		.root {
 			--mediaImage-scale: 0.80;
 		}
 	}
-
+	
 	@container mediaImage (max-width: 130px) {
 		.root {
 			--mediaImage-scale: 0.75;
 		}
 	}
-
+	
 	@container mediaImage (max-width: 120px) {
 		.root {
 			--mediaImage-scale: 0.70;
 		}
 	}
-
+	
 	@container mediaImage (max-width: 110px) {
 		.root {
 			--mediaImage-scale: 0.65;
 		}
 	}
-
+	
 	@container mediaImage (max-width: 100px) {
 		.root {
 			--mediaImage-scale: 0.60;
 		}
-
+	
 		.controlsLowerLeft {
 			display: none;
 		}
-
+	
 		.controlsUpperLeft {
 			display: none;
 		}

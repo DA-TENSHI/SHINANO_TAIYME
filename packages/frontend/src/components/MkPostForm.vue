@@ -98,7 +98,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 		</datalist>
 	</div>
 	</template>
-
+	
 	<script lang="ts" setup>
 	import { toASCII } from 'punycode';
 	import { inject, watch, nextTick, onMounted, defineAsyncComponent, provide, shallowRef, ref, computed } from 'vue';
@@ -130,11 +130,11 @@ SPDX-License-Identifier: AGPL-3.0-only
 	import { emojiPicker } from '@/scripts/emoji-picker.js';
 	import { mfmFunctionPicker } from '@/scripts/mfm-function-picker.js';
 	import { filterKeyboardNonComposing } from '@/scripts/tms/filter-keyboard.js';
-
+	
 	const $i = signinRequired();
-
+	
 	const modal = inject<boolean>('modal', false);
-
+	
 	const props = withDefaults(defineProps<{
 		reply?: Misskey.entities.Note;
 		renote?: Misskey.entities.Note;
@@ -159,23 +159,23 @@ SPDX-License-Identifier: AGPL-3.0-only
 		mock: false,
 		initialLocalOnly: undefined,
 	});
-
+	
 	provide('mock', props.mock);
-
+	
 	const emit = defineEmits<{
 		(ev: 'posted'): void;
 		(ev: 'cancel'): void;
 		(ev: 'esc'): void;
-
+	
 		// Mock用
 		(ev: 'fileChangeSensitive', fileId: string, to: boolean): void;
 	}>();
-
+	
 	const textareaEl = shallowRef<HTMLTextAreaElement | null>(null);
 	const cwInputEl = shallowRef<HTMLInputElement | null>(null);
 	const hashtagsInputEl = shallowRef<HTMLInputElement | null>(null);
 	const visibilityButton = shallowRef<HTMLElement>();
-
+	
 	const posting = ref(false);
 	const posted = ref(false);
 	const text = ref(props.initialText ?? '');
@@ -202,10 +202,10 @@ SPDX-License-Identifier: AGPL-3.0-only
 	const imeText = ref('');
 	const showingOptions = ref(false);
 	const textAreaReadOnly = ref(false);
-
+	
 	const draftKey = computed((): string => {
 		let key = props.channel ? `channel:${props.channel.id}` : '';
-
+	
 		if (props.renote) {
 			key += `renote:${props.renote.id}`;
 		} else if (props.reply) {
@@ -213,10 +213,10 @@ SPDX-License-Identifier: AGPL-3.0-only
 		} else {
 			key += `note:${$i.id}`;
 		}
-
+	
 		return key;
 	});
-
+	
 	const placeholder = computed((): string => {
 		if (props.renote) {
 			return i18n.ts._postForm.quotePlaceholder;
@@ -236,7 +236,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 			return xs[Math.floor(Math.random() * xs.length)];
 		}
 	});
-
+	
 	const submitText = computed((): string => {
 		return props.renote
 			? i18n.ts.quote
@@ -244,15 +244,15 @@ SPDX-License-Identifier: AGPL-3.0-only
 				? i18n.ts.reply
 				: i18n.ts.note;
 	});
-
+	
 	const textLength = computed((): number => {
 		return (text.value + imeText.value).length;
 	});
-
+	
 	const maxTextLength = computed((): number => {
 		return instance ? instance.maxNoteTextLength : 1000;
 	});
-
+	
 	const canPost = computed((): boolean => {
 		return !props.mock && !posting.value && !posted.value &&
 			(
@@ -265,63 +265,63 @@ SPDX-License-Identifier: AGPL-3.0-only
 			(textLength.value <= maxTextLength.value) &&
 			(!poll.value || poll.value.choices.length >= 2);
 	});
-
+	
 	const withHashtags = computed(defaultStore.makeGetterSetter('postFormWithHashtags'));
 	const hashtags = computed(defaultStore.makeGetterSetter('postFormHashtags'));
-
+	
 	watch(text, () => {
 		checkMissingMention();
 	}, { immediate: true });
-
+	
 	watch(visibility, () => {
 		checkMissingMention();
 	}, { immediate: true });
-
+	
 	watch(visibleUsers, () => {
 		checkMissingMention();
 	}, {
 		deep: true,
 	});
-
+	
 	if (props.mention) {
 		text.value = props.mention.host ? `@${props.mention.username}@${toASCII(props.mention.host)}` : `@${props.mention.username}`;
 		text.value += ' ';
 	}
-
+	
 	if (props.reply && (props.reply.user.username !== $i.username || (props.reply.user.host != null && props.reply.user.host !== host))) {
 		text.value = `@${props.reply.user.username}${props.reply.user.host != null ? '@' + toASCII(props.reply.user.host) : ''} `;
 	}
-
+	
 	if (props.reply && props.reply.text != null) {
 		const ast = mfm.parse(props.reply.text);
 		const otherHost = props.reply.user.host;
-
+	
 		for (const x of extractMentions(ast)) {
 			const mention = x.host ?
 				`@${x.username}@${toASCII(x.host)}` :
 				(otherHost == null || otherHost === host) ?
 					`@${x.username}` :
 					`@${x.username}@${toASCII(otherHost)}`;
-
+	
 			// 自分は除外
 			if ($i.username === x.username && (x.host == null || x.host === host)) continue;
-
+	
 			// 重複は除外
 			if (text.value.includes(`${mention} `)) continue;
-
+	
 			text.value += `${mention} `;
 		}
 	}
-
+	
 	if ($i.isSilenced && visibility.value === 'public') {
 		visibility.value = 'home';
 	}
-
+	
 	if (props.channel) {
 		visibility.value = 'public';
 		localOnly.value = true; // TODO: チャンネルが連合するようになった折には消す
 	}
-
+	
 	// 公開以外へのリプライ時は元の公開範囲を引き継ぐ
 	if (props.reply && ['home', 'followers', 'specified'].includes(props.reply.visibility)) {
 		if (props.reply.visibility === 'home' && visibility.value === 'followers') {
@@ -331,7 +331,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 		} else {
 			visibility.value = props.reply.visibility;
 		}
-
+	
 		if (visibility.value === 'specified') {
 			if (props.reply.visibleUserIds) {
 				misskeyApi('users/show', {
@@ -340,7 +340,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 					users.forEach(u => pushVisibleUser(u));
 				});
 			}
-
+	
 			if (props.reply.userId !== $i.id) {
 				misskeyApi('users/show', { userId: props.reply.userId }).then(user => {
 					pushVisibleUser(user);
@@ -348,18 +348,18 @@ SPDX-License-Identifier: AGPL-3.0-only
 			}
 		}
 	}
-
+	
 	if (props.specified) {
 		visibility.value = 'specified';
 		pushVisibleUser(props.specified);
 	}
-
+	
 	// keep cw when reply
 	if (defaultStore.state.keepCw && props.reply && props.reply.cw) {
 		useCw.value = true;
 		cw.value = props.reply.cw;
 	}
-
+	
 	function watchForDraft() {
 		watch(text, () => saveDraft());
 		watch(useCw, () => saveDraft());
@@ -371,11 +371,11 @@ SPDX-License-Identifier: AGPL-3.0-only
 		watch(quoteId, () => saveDraft());
 		watch(reactionAcceptance, () => saveDraft());
 	}
-
+	
 	function checkMissingMention() {
 		if (visibility.value === 'specified') {
 			const ast = mfm.parse(text.value);
-
+	
 			for (const x of extractMentions(ast)) {
 				if (!visibleUsers.value.some(u => (u.username === x.username) && (u.host === x.host))) {
 					hasNotSpecifiedMentions.value = true;
@@ -385,10 +385,10 @@ SPDX-License-Identifier: AGPL-3.0-only
 		}
 		hasNotSpecifiedMentions.value = false;
 	}
-
+	
 	function addMissingMention() {
 		const ast = mfm.parse(text.value);
-
+	
 		for (const x of extractMentions(ast)) {
 			if (!visibleUsers.value.some(u => (u.username === x.username) && (u.host === x.host))) {
 				misskeyApi('users/show', { username: x.username, host: x.host }).then(user => {
@@ -397,7 +397,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 			}
 		}
 	}
-
+	
 	function togglePoll() {
 		if (props.mock) return;
 		if (poll.value) {
@@ -411,55 +411,55 @@ SPDX-License-Identifier: AGPL-3.0-only
 			};
 		}
 	}
-
+	
 	function addTag(tag: string) {
 		insertTextAtCursor(textareaEl.value, ` #${tag} `);
 	}
-
+	
 	function focus() {
 		if (textareaEl.value) {
 			textareaEl.value.focus();
 			textareaEl.value.setSelectionRange(textareaEl.value.value.length, textareaEl.value.value.length);
 		}
 	}
-
+	
 	function chooseFileFrom(ev) {
 		if (props.mock) return;
-
+	
 		selectFiles(ev.currentTarget ?? ev.target, i18n.ts.attachFile).then(files_ => {
 			for (const file of files_) {
 				files.value.push(file);
 			}
 		});
 	}
-
+	
 	function detachFile(id) {
 		files.value = files.value.filter(x => x.id !== id);
 	}
-
+	
 	function updateFileSensitive(file, sensitive) {
 		if (props.mock) {
 			emit('fileChangeSensitive', file.id, sensitive);
 		}
 		files.value[files.value.findIndex(x => x.id === file.id)].isSensitive = sensitive;
 	}
-
+	
 	function updateFileName(file, name) {
 		files.value[files.value.findIndex(x => x.id === file.id)].name = name;
 	}
-
+	
 	function replaceFile(file: Misskey.entities.DriveFile, newFile: Misskey.entities.DriveFile): void {
 		files.value[files.value.findIndex(x => x.id === file.id)] = newFile;
 	}
-
+	
 	function upload(file: File, name?: string): void {
 		if (props.mock) return;
-
+	
 		uploadFile(file, defaultStore.state.uploadFolder, name).then(res => {
 			files.value.push(res);
 		});
 	}
-
+	
 	function setVisibility() {
 		if (props.mock) return;
 		if (props.channel) {
@@ -467,7 +467,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 			localOnly.value = true; // TODO: チャンネルが連合するようになった折には消す
 			return;
 		}
-
+	
 		const { dispose } = os.popup(defineAsyncComponent(() => import('@/components/MkVisibilityPicker.vue')), {
 			currentVisibility: visibility.value,
 			isSilenced: $i.isSilenced,
@@ -484,7 +484,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 			closed: () => dispose(),
 		});
 	}
-
+	
 	async function toggleLocalOnly() {
 		if (props.mock) return;
 		if (props.channel) {
@@ -492,9 +492,9 @@ SPDX-License-Identifier: AGPL-3.0-only
 			localOnly.value = true; // TODO: チャンネルが連合するようになった折には消す
 			return;
 		}
-
+	
 		const neverShowInfo = miLocalStorage.getItem('neverShowLocalOnlyInfo');
-
+	
 		if (!localOnly.value && neverShowInfo !== 'true') {
 			const confirm = await os.actions({
 				type: 'question',
@@ -519,18 +519,18 @@ SPDX-License-Identifier: AGPL-3.0-only
 			});
 			if (confirm.canceled) return;
 			if (confirm.result === 'no') return;
-
+	
 			if (confirm.result === 'neverShow') {
 				miLocalStorage.setItem('neverShowLocalOnlyInfo', 'true');
 			}
 		}
-
+	
 		localOnly.value = !localOnly.value;
 		if (defaultStore.state.rememberNoteVisibility) {
 			defaultStore.set('localOnly', localOnly.value);
 		}
 	}
-
+	
 	async function toggleReactionAcceptance() {
 		if (props.mock) return;
 		const select = await os.select({
@@ -547,61 +547,61 @@ SPDX-License-Identifier: AGPL-3.0-only
 		if (select.canceled) return;
 		reactionAcceptance.value = select.result;
 	}
-
+	
 	function toggleUseCw() {
 		if (props.mock) return;
 		useCw.value = !useCw.value;
 	}
-
+	
 	function toggleWithHashtags() {
 		if (props.mock) return;
 		withHashtags.value = !withHashtags.value;
 	}
-
+	
 	function pushVisibleUser(user: Misskey.entities.UserDetailed) {
 		if (!visibleUsers.value.some(u => u.username === user.username && u.host === user.host)) {
 			visibleUsers.value.push(user);
 		}
 	}
-
+	
 	function addVisibleUser() {
 		os.selectUser().then(user => {
 			pushVisibleUser(user);
-
+	
 			if (!text.value.toLowerCase().includes(`@${user.username.toLowerCase()}`)) {
 				text.value = `@${Misskey.acct.toString(user)} ${text.value}`;
 			}
 		});
 	}
-
+	
 	function removeVisibleUser(user) {
 		visibleUsers.value = erase(user, visibleUsers.value);
 	}
-
+	
 	function clear() {
 		text.value = '';
 		files.value = [];
 		poll.value = null;
 		quoteId.value = null;
 	}
-
+	
 	const onKeydown = filterKeyboardNonComposing(ev => {
 		if (ev.key === 'Enter' && (ev.ctrlKey || ev.metaKey) && canPost.value) post();
 		if (ev.key === 'Escape') emit('esc');
 	});
-
+	
 	function onCompositionUpdate(ev: CompositionEvent) {
 		imeText.value = ev.data;
 	}
-
+	
 	function onCompositionEnd(ev: CompositionEvent) {
 		imeText.value = '';
 	}
-
+	
 	async function onPaste(ev: ClipboardEvent) {
 		if (props.mock) return;
 		if (!ev.clipboardData) return;
-
+	
 		for (const { item, i } of Array.from(ev.clipboardData.items, (data, x) => ({ item: data, i: x }))) {
 			if (item.kind === 'file') {
 				const file = item.getAsFile();
@@ -612,12 +612,12 @@ SPDX-License-Identifier: AGPL-3.0-only
 				upload(file, formatted);
 			}
 		}
-
+	
 		const paste = ev.clipboardData.getData('text');
-
+	
 		if (!props.renote && !quoteId.value && paste.startsWith(url + '/notes/')) {
 			ev.preventDefault();
-
+	
 			os.confirm({
 				type: 'info',
 				text: i18n.ts.quoteQuestion,
@@ -626,11 +626,11 @@ SPDX-License-Identifier: AGPL-3.0-only
 					insertTextAtCursor(textareaEl.value, paste);
 					return;
 				}
-
+	
 				quoteId.value = paste.substring(url.length).match(/^\/notes\/(.+?)\/?$/)?.[1] ?? null;
 			});
 		}
-
+	
 		if (paste.length > 1000) {
 			ev.preventDefault();
 			os.confirm({
@@ -641,14 +641,14 @@ SPDX-License-Identifier: AGPL-3.0-only
 					insertTextAtCursor(textareaEl.value, paste);
 					return;
 				}
-
+	
 				const fileName = formatTimeString(new Date(), defaultStore.state.pastedFileName).replace(/{{number}}/g, '0');
 				const file = new File([paste], `${fileName}.txt`, { type: 'text/plain' });
 				upload(file, `${fileName}.txt`);
 			});
 		}
 	}
-
+	
 	function onDragover(ev) {
 		if (!ev.dataTransfer.items[0]) return;
 		const isFile = ev.dataTransfer.items[0].kind === 'file';
@@ -674,25 +674,25 @@ SPDX-License-Identifier: AGPL-3.0-only
 			}
 		}
 	}
-
+	
 	function onDragenter() {
 		draghover.value = true;
 	}
-
+	
 	function onDragleave() {
 		draghover.value = false;
 	}
-
+	
 	function onDrop(ev: DragEvent): void {
 		draghover.value = false;
-
+	
 		// ファイルだったら
 		if (ev.dataTransfer && ev.dataTransfer.files.length > 0) {
 			ev.preventDefault();
 			for (const x of Array.from(ev.dataTransfer.files)) upload(x);
 			return;
 		}
-
+	
 		//#region ドライブのファイル
 		const driveFile = ev.dataTransfer?.getData(_DATA_TRANSFER_DRIVE_FILE_);
 		if (driveFile != null && driveFile !== '') {
@@ -702,12 +702,12 @@ SPDX-License-Identifier: AGPL-3.0-only
 		}
 		//#endregion
 	}
-
+	
 	function saveDraft() {
 		if (props.instant || props.mock) return;
-
+	
 		const draftData = JSON.parse(miLocalStorage.getItem('drafts') ?? '{}');
-
+	
 		draftData[draftKey.value] = {
 			updatedAt: new Date(),
 			data: {
@@ -723,18 +723,18 @@ SPDX-License-Identifier: AGPL-3.0-only
 				reactionAcceptance: reactionAcceptance.value,
 			},
 		};
-
+	
 		miLocalStorage.setItem('drafts', JSON.stringify(draftData));
 	}
-
+	
 	function deleteDraft() {
 		const draftData = JSON.parse(miLocalStorage.getItem('drafts') ?? '{}');
-
+	
 		delete draftData[draftKey.value];
-
+	
 		miLocalStorage.setItem('drafts', JSON.stringify(draftData));
 	}
-
+	
 	async function post(ev?: MouseEvent) {
 		if (useCw.value && (cw.value == null || cw.value.trim() === '')) {
 			os.alert({
@@ -743,10 +743,10 @@ SPDX-License-Identifier: AGPL-3.0-only
 			});
 			return;
 		}
-
+	
 		if (ev) {
 			const el = (ev.currentTarget ?? ev.target) as HTMLElement | null;
-
+	
 			if (el) {
 				const rect = el.getBoundingClientRect();
 				const x = rect.left + (el.offsetWidth / 2);
@@ -756,16 +756,16 @@ SPDX-License-Identifier: AGPL-3.0-only
 				});
 			}
 		}
-
+	
 		if (props.mock) return;
-
+	
 		const annoying =
 			text.value.includes('$[x2') ||
 			text.value.includes('$[x3') ||
 			text.value.includes('$[x4') ||
 			text.value.includes('$[scale') ||
 			text.value.includes('$[position');
-
+	
 		if (annoying && visibility.value === 'public') {
 			const { canceled, result } = await os.actions({
 				type: 'warning',
@@ -782,14 +782,14 @@ SPDX-License-Identifier: AGPL-3.0-only
 					text: i18n.ts.thisPostMayBeAnnoyingIgnore,
 				}],
 			});
-
+	
 			if (canceled) return;
 			if (result === 'cancel') return;
 			if (result === 'home') {
 				visibility.value = 'home';
 			}
 		}
-
+	
 		let postData = {
 			text: text.value === '' ? null : text.value,
 			fileIds: files.value.length > 0 ? files.value.map(f => f.id) : undefined,
@@ -803,7 +803,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 			visibleUserIds: visibility.value === 'specified' ? visibleUsers.value.map(u => u.id) : undefined,
 			reactionAcceptance: reactionAcceptance.value,
 		};
-
+	
 		if (withHashtags.value && hashtags.value && hashtags.value.trim() !== '') {
 			const hashtags_ = hashtags.value.trim().split(' ').map(x => x.startsWith('#') ? x : '#' + x).join(' ');
 			if (!postData.text) {
@@ -818,7 +818,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 				postData.text = postTextLines.join('\n');
 			}
 		}
-
+	
 		// plugin
 		if (notePostInterruptors.length > 0) {
 			for (const interruptor of notePostInterruptors) {
@@ -829,14 +829,14 @@ SPDX-License-Identifier: AGPL-3.0-only
 				}
 			}
 		}
-
+	
 		let token: string | undefined = undefined;
-
+	
 		if (postAccount.value) {
 			const storedAccounts = await getAccounts();
 			token = storedAccounts.find(x => x.id === postAccount.value?.id)?.token;
 		}
-
+	
 		posting.value = true;
 		misskeyApi('notes/create', postData, token).then(() => {
 			if (props.freezeAfterPosted) {
@@ -854,12 +854,12 @@ SPDX-License-Identifier: AGPL-3.0-only
 				}
 				posting.value = false;
 				postAccount.value = null;
-
+	
 				incNotesCount();
 				if (notesCount === 1) {
 					claimAchievement('notes1');
 				}
-
+	
 				const text = postData.text ?? '';
 				const lowerCase = text.toLowerCase();
 				if ((lowerCase.includes('love') || lowerCase.includes('❤')) && lowerCase.includes('misskey')) {
@@ -869,11 +869,11 @@ SPDX-License-Identifier: AGPL-3.0-only
 					'https://youtu.be/Efrlqw8ytg4',
 					'https://www.youtube.com/watch?v=Efrlqw8ytg4',
 					'https://m.youtube.com/watch?v=Efrlqw8ytg4',
-
+	
 					'https://youtu.be/XVCwzwxdHuA',
 					'https://www.youtube.com/watch?v=XVCwzwxdHuA',
 					'https://m.youtube.com/watch?v=XVCwzwxdHuA',
-
+	
 					'https://open.spotify.com/track/3Cuj0mZrlLoXx9nydNi7RB',
 					'https://open.spotify.com/track/7anfcaNPQWlWCwyCHmZqNy',
 					'https://open.spotify.com/track/5Odr16TvEN4my22K9nbH7l',
@@ -881,11 +881,11 @@ SPDX-License-Identifier: AGPL-3.0-only
 				].some(url => text.includes(url))) {
 					claimAchievement('brainDiver');
 				}
-
+	
 				if (props.renote && (props.renote.userId === $i.id) && text.length > 0) {
 					claimAchievement('selfQuote');
 				}
-
+	
 				const date = new Date();
 				const h = date.getHours();
 				const m = date.getMinutes();
@@ -905,30 +905,30 @@ SPDX-License-Identifier: AGPL-3.0-only
 			});
 		});
 	}
-
+	
 	function cancel() {
 		emit('cancel');
 	}
-
+	
 	function insertMention() {
 		if (props.mock) return;
 		os.selectUser({ localOnly: localOnly.value, includeSelf: true }).then(user => {
 			insertTextAtCursor(textareaEl.value, '@' + Misskey.acct.toString(user) + ' ');
 		});
 	}
-
+	
 	async function insertEmoji(ev: MouseEvent) {
 		if (props.mock) return;
 		textAreaReadOnly.value = true;
 		const target = ev.currentTarget ?? ev.target;
 		if (target == null) return;
-
+	
 		// emojiPickerはダイアログが閉じずにtextareaとやりとりするので、
 		// focustrapをかけているとinsertTextAtCursorが効かない
 		// そのため、投稿フォームのテキストに直接注入する
 		// See: https://github.com/misskey-dev/misskey/pull/14282
 		//      https://github.com/misskey-dev/misskey/issues/14274
-
+	
 		let pos = textareaEl.value?.selectionStart ?? 0;
 		let posEnd = textareaEl.value?.selectionEnd ?? text.value.length;
 		emojiPicker.show(
@@ -946,7 +946,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 			},
 		);
 	}
-
+	
 	async function insertMfmFunction(ev: MouseEvent) {
 		if (props.mock) return;
 		if (textareaEl.value == null) return;
@@ -956,7 +956,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 			text,
 		);
 	}
-
+	
 	function showActions(ev: MouseEvent) {
 		if (props.mock) return;
 		os.popupMenu(postFormActions.map(action => ({
@@ -973,12 +973,12 @@ SPDX-License-Identifier: AGPL-3.0-only
 			},
 		})), ev.currentTarget ?? ev.target);
 	}
-
+	
 	const postAccount = ref<Misskey.entities.UserDetailed | null>(null);
-
+	
 	function openAccountMenu(ev: MouseEvent) {
 		if (props.mock) return;
-
+	
 		openAccountMenu_({
 			withExtraOperation: false,
 			includeCurrentAccount: true,
@@ -992,21 +992,21 @@ SPDX-License-Identifier: AGPL-3.0-only
 			},
 		}, ev);
 	}
-
+	
 	onMounted(() => {
 		if (props.autofocus) {
 			focus();
-
+	
 			nextTick(() => {
 				focus();
 			});
 		}
-
+	
 		// TODO: detach when unmount
 		if (textareaEl.value) new Autocomplete(textareaEl.value, text);
 		if (cwInputEl.value) new Autocomplete(cwInputEl.value, cw);
 		if (hashtagsInputEl.value) new Autocomplete(hashtagsInputEl.value, hashtags);
-
+	
 		nextTick(() => {
 			// 書きかけの投稿を復元
 			if (!props.instant && !props.mention && !props.specified && !props.mock) {
@@ -1030,7 +1030,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 					reactionAcceptance.value = draft.data.reactionAcceptance;
 				}
 			}
-
+	
 			// 削除して編集
 			if (props.initialNote) {
 				const init = props.initialNote;
@@ -1056,27 +1056,27 @@ SPDX-License-Identifier: AGPL-3.0-only
 				quoteId.value = init.renote ? init.renote.id : null;
 				reactionAcceptance.value = init.reactionAcceptance;
 			}
-
+	
 			nextTick(() => watchForDraft());
 		});
 	});
-
+	
 	defineExpose({
 		clear,
 	});
 	</script>
-
+	
 	<style lang="scss" module>
 	.root {
 		position: relative;
 		container-type: inline-size;
-
+	
 		&.modal {
 			width: 100%;
 			max-width: 520px;
 		}
 	}
-
+	
 	//#region header
 	.header {
 		z-index: 1000;
@@ -1085,32 +1085,32 @@ SPDX-License-Identifier: AGPL-3.0-only
 		flex-wrap: nowrap;
 		gap: 4px;
 	}
-
+	
 	.headerLeft {
 		display: flex;
 		flex: 0 1 100px;
 	}
-
+	
 	.cancel {
 		padding: 0;
 		font-size: 1em;
 		height: 100%;
 		flex: 0 1 50px;
 	}
-
+	
 	.account {
 		height: 100%;
 		display: inline-flex;
 		vertical-align: bottom;
 		flex: 0 1 50px;
 	}
-
+	
 	.avatar {
 		width: 28px;
 		height: 28px;
 		margin: auto;
 	}
-
+	
 	.headerRight {
 		display: flex;
 		min-height: 48px;
@@ -1123,41 +1123,41 @@ SPDX-License-Identifier: AGPL-3.0-only
 		overflow: clip;
 		padding-left: 4px;
 	}
-
+	
 	.submit {
 		margin: 12px 12px 12px 6px;
 		vertical-align: bottom;
-
+	
 		&:focus-visible {
 			outline: none;
-
+	
 			> .submitInner {
 				outline: 2px solid var(--MI_THEME-fgOnAccent);
 				outline-offset: -4px;
 			}
 		}
-
+	
 		&:disabled {
 			opacity: 0.7;
 		}
-
+	
 		&.posting {
 			cursor: wait;
 		}
-
+	
 		&:not(:disabled):hover {
 			> .submitInner {
 				background: linear-gradient(90deg, hsl(from var(--MI_THEME-accent) h s calc(l + (var(--TMS-hsl-base-l) * 5))), hsl(from var(--MI_THEME-accent) h s calc(l + (var(--TMS-hsl-base-l) * 5))));
 			}
 		}
-
+	
 		&:not(:disabled):active {
 			> .submitInner {
 				background: linear-gradient(90deg, hsl(from var(--MI_THEME-accent) h s calc(l + (var(--TMS-hsl-base-l) * 5))), hsl(from var(--MI_THEME-accent) h s calc(l + (var(--TMS-hsl-base-l) * 5))));
 			}
 		}
 	}
-
+	
 	.colorBar {
 		position: absolute;
 		top: 0px;
@@ -1167,7 +1167,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 		border-radius: 999px;
 		pointer-events: none;
 	}
-
+	
 	.submitInner {
 		padding: 0 12px;
 		line-height: 34px;
@@ -1178,36 +1178,36 @@ SPDX-License-Identifier: AGPL-3.0-only
 		color: var(--MI_THEME-fgOnAccent);
 		background: linear-gradient(90deg, var(--MI_THEME-buttonGradateA), var(--MI_THEME-buttonGradateB));
 	}
-
+	
 	.headerRightItem {
 		margin: 0;
 		padding: 8px;
 		border-radius: 6px;
-
+	
 		&:hover {
 			background: var(--MI_THEME-X5);
 		}
-
+	
 		&:disabled {
 			background: none;
 		}
-
+	
 		&.danger {
 			color: #ff2a2a;
 		}
 	}
-
+	
 	.headerRightButtonText {
 		padding-left: 6px;
 	}
-
+	
 	.visibility {
 		overflow: hidden; // fallback (overflow: clip)
 		overflow: clip;
 		text-overflow: ellipsis;
 		white-space: nowrap;
 		max-width: 210px;
-
+	
 		&:enabled {
 			> .headerRightButtonText {
 				opacity: 0.8;
@@ -1215,7 +1215,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 		}
 	}
 	//#endregion
-
+	
 	.preview {
 		padding: 16px 20px 0 20px;
 		min-height: 75px;
@@ -1226,50 +1226,50 @@ SPDX-License-Identifier: AGPL-3.0-only
 			transparent 0px 10px,
 			var(--c) 6px 16px
 		);
-
+	
 		&,
 		html[data-color-scheme=light] & {
 			--c: rgb(0 0 0 / 0.02);
 		}
-
+	
 		html[data-color-scheme=dark] & {
 			--c: rgb(255 255 255 / 0.02);
 		}
 	}
-
+	
 	.targetNote {
 		padding: 0 20px 16px 20px;
 	}
-
+	
 	.withQuote {
 		margin: 0 0 8px 0;
 		color: var(--MI_THEME-accent);
 	}
-
+	
 	.toSpecified {
 		padding: 6px 24px;
 		margin-bottom: 8px;
 		overflow: auto;
 		white-space: nowrap;
 	}
-
+	
 	.visibleUsers {
 		display: inline;
 		top: -1px;
 		font-size: 14px;
 	}
-
+	
 	.visibleUser {
 		margin-right: 14px;
 		padding: 8px 0 8px 8px;
 		border-radius: 8px;
 		background: var(--MI_THEME-X4);
 	}
-
+	
 	.hasNotSpecifiedMentions {
 		margin: 0 20px 16px 20px;
 	}
-
+	
 	.cw,
 	.hashtags,
 	.text {
@@ -1284,38 +1284,38 @@ SPDX-License-Identifier: AGPL-3.0-only
 		background: transparent;
 		color: var(--MI_THEME-fg);
 		font-family: inherit;
-
+	
 		&:focus {
 			outline: none;
 		}
-
+	
 		&:disabled {
 			opacity: 0.5;
 		}
 	}
-
+	
 	.cw {
 		z-index: 1;
 		padding-bottom: 8px;
 		border-bottom: solid 0.5px var(--MI_THEME-divider);
 	}
-
+	
 	.hashtags {
 		z-index: 1;
 		padding-top: 8px;
 		padding-bottom: 8px;
 		border-top: solid 0.5px var(--MI_THEME-divider);
 	}
-
+	
 	.textOuter {
 		width: 100%;
 		position: relative;
-
+	
 		&.withCw {
 			padding-top: 8px;
 		}
 	}
-
+	
 	.text {
 		max-width: 100%;
 		min-width: 100%;
@@ -1323,7 +1323,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 		min-height: 90px;
 		height: 100%;
 	}
-
+	
 	.textCount {
 		position: absolute;
 		top: 0;
@@ -1334,18 +1334,18 @@ SPDX-License-Identifier: AGPL-3.0-only
 		border-radius: 6px;
 		min-width: 1.6em;
 		text-align: center;
-
+	
 		&.textOver {
 			color: #ff2a2a;
 		}
 	}
-
+	
 	.footer {
 		display: flex;
 		padding: 0 16px 16px 16px;
 		font-size: 1em;
 	}
-
+	
 	.footerLeft {
 		flex: 1;
 		display: grid;
@@ -1353,7 +1353,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 		grid-template-columns: repeat(auto-fill, minmax(42px, 1fr));
 		grid-auto-rows: 40px;
 	}
-
+	
 	.footerRight {
 		flex: 0;
 		margin-left: auto;
@@ -1363,7 +1363,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 		grid-auto-rows: 40px;
 		direction: rtl;
 	}
-
+	
 	.footerButton {
 		display: inline-block;
 		padding: 0;
@@ -1372,41 +1372,41 @@ SPDX-License-Identifier: AGPL-3.0-only
 		width: auto;
 		height: 100%;
 		border-radius: 6px;
-
+	
 		&:hover {
 			background: var(--MI_THEME-X5);
 		}
-
+	
 		&.footerButtonActive {
 			color: var(--MI_THEME-accent);
 		}
 	}
-
+	
 	.previewButtonActive {
 		color: var(--MI_THEME-accent);
 	}
-
+	
 	@container (max-width: 500px) {
 		.headerRight {
 			font-size: .9em;
 		}
-
+	
 		.headerRightButtonText {
 			display: none;
 		}
-
+	
 		.visibility {
 			overflow: initial;
 		}
-
+	
 		.submit {
 			margin: 8px 8px 8px 4px;
 		}
-
+	
 		.toSpecified {
 			padding: 6px 16px;
 		}
-
+	
 		.preview {
 			padding: 16px 14px 0 14px;
 		}
@@ -1415,32 +1415,32 @@ SPDX-License-Identifier: AGPL-3.0-only
 		.text {
 			padding: 0 16px;
 		}
-
+	
 		.text {
 			min-height: 80px;
 		}
-
+	
 		.footer {
 			padding: 0 8px 8px 8px;
 		}
 	}
-
+	
 	@container (max-width: 350px) {
 		.footer {
 			font-size: 0.9em;
 		}
-
+	
 		.footerLeft {
 			grid-template-columns: repeat(auto-fill, minmax(38px, 1fr));
 		}
-
+	
 		.footerRight {
 			grid-template-columns: repeat(auto-fill, minmax(38px, 1fr));
 		}
-
+	
 		.headerRight {
 			gap: 0;
 		}
-
+	
 	}
 	</style>
