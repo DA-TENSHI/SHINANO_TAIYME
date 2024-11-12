@@ -39,12 +39,12 @@ SPDX-License-Identifier: AGPL-3.0-only
 		</Transition>
 	</div>
 	</template>
-	
+
 	<script lang="ts" setup>
 	import { onMounted, onUnmounted, ref, shallowRef, watch } from 'vue';
 	import { defaultStore } from '@/store.js';
 	import { i18n } from '@/i18n.js';
-	
+
 	const props = withDefaults(defineProps<{
 		showHeader?: boolean;
 		thin?: boolean;
@@ -58,14 +58,14 @@ SPDX-License-Identifier: AGPL-3.0-only
 		showHeader: true,
 		maxHeight: null,
 	});
-	
+
 	const rootEl = shallowRef<HTMLElement>();
 	const contentEl = shallowRef<HTMLElement>();
 	const headerEl = shallowRef<HTMLElement>();
 	const showBody = ref(props.expanded);
 	const omitted = ref(false);
 	const manuallyOperated = ref(false);
-	
+
 	function enter(el: Element) {
 		if (!(el instanceof HTMLElement)) return;
 		const elementHeight = el.getBoundingClientRect().height;
@@ -73,12 +73,12 @@ SPDX-License-Identifier: AGPL-3.0-only
 		el.offsetHeight; // reflow
 		el.style.height = `${Math.min(elementHeight, props.maxHeight ?? Infinity)}px`;
 	}
-	
+
 	function afterEnter(el: Element) {
 		if (!(el instanceof HTMLElement)) return;
 		el.style.height = '';
 	}
-	
+
 	function leave(el: Element) {
 		if (!(el instanceof HTMLElement)) return;
 		const elementHeight = el.getBoundingClientRect().height;
@@ -86,26 +86,26 @@ SPDX-License-Identifier: AGPL-3.0-only
 		el.offsetHeight; // reflow
 		el.style.height = '0';
 	}
-	
+
 	function afterLeave(el: Element) {
 		if (!(el instanceof HTMLElement)) return;
 		el.style.height = '';
 	}
-	
+
 	const showMore = () => {
 		manuallyOperated.value = true;
 		omitted.value = false;
 	};
-	
+
 	const calcOmit = () => {
 		if (manuallyOperated.value || contentEl.value == null || props.maxHeight == null) return;
 		omitted.value = contentEl.value.offsetHeight > props.maxHeight;
 	};
-	
+
 	const omitObserver = new ResizeObserver(() => {
 		calcOmit();
 	});
-	
+
 	onMounted(() => {
 		watch(showBody, v => {
 			if (!rootEl.value) return;
@@ -119,19 +119,19 @@ SPDX-License-Identifier: AGPL-3.0-only
 		}, {
 			immediate: true,
 		});
-	
+
 		if (rootEl.value) rootEl.value.style.setProperty('--maxHeight', props.maxHeight + 'px');
-	
+
 		calcOmit();
-	
+
 		if (contentEl.value) omitObserver.observe(contentEl.value);
 	});
-	
+
 	onUnmounted(() => {
 		omitObserver.disconnect();
 	});
 	</script>
-	
+
 	<style lang="scss" module>
 	.transition_toggle_enterActive,
 	.transition_toggle_leaveActive {
@@ -143,27 +143,27 @@ SPDX-License-Identifier: AGPL-3.0-only
 	.transition_toggle_leaveTo {
 		opacity: 0;
 	}
-	
+
 	.root {
 		position: relative;
 		overflow: hidden; // fallback (overflow: clip)
 		overflow: clip;
 		contain: content;
-	
+
 		&.naked {
 			background: transparent !important;
 			box-shadow: none !important;
 		}
-	
+
 		&.scrollable {
 			display: flex;
 			flex-direction: column;
-	
+
 			> .content {
 				overflow: auto;
 			}
 		}
-	
+
 		&.thin {
 			> .header {
 				> .title {
@@ -173,7 +173,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 			}
 		}
 	}
-	
+
 	.header {
 		position: sticky;
 		top: var(--MI-stickyTop, 0px);
@@ -184,20 +184,20 @@ SPDX-License-Identifier: AGPL-3.0-only
 		z-index: 2;
 		line-height: 1.4em;
 	}
-	
+
 	.title {
 		margin: 0;
 		padding: 12px 16px;
-	
+
 		&:empty {
 			display: none;
 		}
 	}
-	
+
 	.titleIcon {
 		margin-right: 6px;
 	}
-	
+
 	.headerSub {
 		position: absolute;
 		z-index: 2;
@@ -205,16 +205,16 @@ SPDX-License-Identifier: AGPL-3.0-only
 		right: 0;
 		height: 100%;
 	}
-	
+
 	.headerButton {
 		width: 42px;
 		height: 100%;
 	}
-	
+
 	.content {
 		--MI-stickyTop: 0px;
 	}
-	
+
 	.omitted {
 		position: relative;
 		min-height: 64px; // .showMoreFade
@@ -222,7 +222,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 		overflow: hidden; // fallback (overflow: clip)
 		overflow: clip;
 	}
-	
+
 	.showMoreFade {
 		display: block;
 		position: absolute;
@@ -233,14 +233,14 @@ SPDX-License-Identifier: AGPL-3.0-only
 		height: 64px; // .omitted
 		background: linear-gradient(0deg, var(--MI_THEME-panel), rgb(from var(--MI_THEME-panel) r g b / 0));
 	}
-	
+
 	.showMoreFade {
 		&:hover {
 			> .fadeLabel {
 				background: var(--MI_THEME-panelHighlight);
 			}
 		}
-	
+
 		> .fadeLabel {
 			display: inline-block;
 			background: var(--MI_THEME-panel);
@@ -250,7 +250,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 			box-shadow: 0 2px 6px rgb(0 0 0 / 20%);
 		}
 	}
-	
+
 	@container (max-width: 380px) {
 		.title {
 			padding: 8px 10px;
