@@ -17,29 +17,10 @@ SPDX-License-Identifier: AGPL-3.0-only
 </template>
 
 <script lang="ts" setup>
-import { defineAsyncComponent, useTemplateRef } from 'vue';
-import { isEnabledUrlPreview } from '@/instance.js';
-import { popup } from '@/os.js';
-import { useTooltip } from '@/scripts/use-tooltip.js';
-
-const props = defineProps<{
+defineProps<{
 	rjNumber: string;
 	url: string;
 }>();
-
-const rootEl = useTemplateRef('rootEl');
-
-useTooltip(rootEl, (showing) => {
-	if (isEnabledUrlPreview.value && rootEl.value != null) {
-		const { dispose } = popup(defineAsyncComponent(() => import('@/components/MkUrlPreviewPopup.vue')), {
-			showing,
-			url: props.url,
-			source: rootEl.value,
-		}, {
-			closed: () => dispose(),
-		});
-	}
-});
 </script>
 
 <style lang="scss" module>

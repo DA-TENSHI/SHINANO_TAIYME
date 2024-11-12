@@ -77,5 +77,10 @@
 	},
 	"optionalDependencies": {
 		"@tensorflow/tfjs-core": "4.4.0"
+	},
+	"pnpm": {
+		"patchedDependencies": {
+			"mfm-js@0.24.0": "patches/mfm-js@0.24.0.patch"
+		}
 	}
 }
