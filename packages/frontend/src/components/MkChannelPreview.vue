@@ -44,30 +44,30 @@ SPDX-License-Identifier: AGPL-3.0-only
 		></div>
 	</div>
 	</template>
-	
+
 	<script lang="ts" setup>
 	import { computed, ref, watch } from 'vue';
 	import { i18n } from '@/i18n.js';
 	import { miLocalStorage } from '@/local-storage.js';
-	
+
 	const props = defineProps<{
 		channel: Record<string, any>;
 	}>();
-	
+
 	const getLastReadedAt = (): number | null => {
 		return miLocalStorage.getItemAsJson(`channelLastReadedAt:${props.channel.id}`) ?? null;
 	};
-	
+
 	const lastReadedAt = ref(getLastReadedAt());
-	
+
 	watch(() => props.channel.id, () => {
 		lastReadedAt.value = getLastReadedAt();
 	});
-	
+
 	const updateLastReadedAt = () => {
 		lastReadedAt.value = props.channel.lastNotedAt ? Date.parse(props.channel.lastNotedAt) : Date.now();
 	};
-	
+
 	const bannerStyle = computed(() => {
 		if (props.channel.bannerUrl) {
 			return { backgroundImage: `url(${props.channel.bannerUrl})` };
@@ -76,21 +76,21 @@ SPDX-License-Identifier: AGPL-3.0-only
 		}
 	});
 	</script>
-	
+
 	<style lang="scss" scoped>
 	.eftoefju {
 		display: block;
 		position: relative;
 		overflow: hidden;
 		width: 100%;
-	
+
 		&:hover {
 			text-decoration: none;
 		}
-	
+
 		&:focus-within {
 			outline: none;
-	
+
 			&::after {
 				content: '';
 				position: absolute;
@@ -103,14 +103,14 @@ SPDX-License-Identifier: AGPL-3.0-only
 				box-shadow: inset 0 0 0 2px var(--MI_THEME-focus);
 			}
 		}
-	
+
 		> .banner {
 			position: relative;
 			width: 100%;
 			height: 200px;
 			background-position: center;
 			background-size: cover;
-	
+
 			> .fade {
 				position: absolute;
 				bottom: 0;
@@ -119,7 +119,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 				height: 64px;
 				background: linear-gradient(0deg, var(--MI_THEME-panel), rgb(from var(--MI_THEME-panel) r g b / 0));
 			}
-	
+
 			> .name {
 				position: absolute;
 				top: 16px;
@@ -129,7 +129,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 				color: #fff;
 				font-size: 1.2em;
 			}
-	
+
 			> .status {
 				position: absolute;
 				z-index: 1;
@@ -141,7 +141,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 				border-radius: 6px;
 				color: #fff;
 			}
-	
+
 			> .sensitiveIndicator {
 				position: absolute;
 				z-index: 1;
@@ -155,59 +155,59 @@ SPDX-License-Identifier: AGPL-3.0-only
 				padding: 4px 7px;
 			}
 		}
-	
+
 		> article {
 			padding: 16px;
-	
+
 			> p {
 				margin: 0;
 				font-size: 1em;
 			}
 		}
-	
+
 		> footer {
 			padding: 12px 16px;
 			border-top: solid 0.5px var(--MI_THEME-divider);
-	
+
 			> span {
 				opacity: 0.7;
 				font-size: 0.9em;
 			}
 		}
-	
+
 		@media (max-width: 550px) {
 			font-size: 0.9em;
-	
+
 			> .banner {
 				height: 80px;
-	
+
 				> .status {
 					display: none;
 				}
 			}
-	
+
 			> article {
 				padding: 12px;
 			}
-	
+
 			> footer {
 				display: none;
 			}
 		}
-	
+
 		@media (max-width: 500px) {
 			font-size: 0.8em;
-	
+
 			> .banner {
 				height: 70px;
 			}
-	
+
 			> article {
 				padding: 8px;
 			}
 		}
 	}
-	
+
 	.indicator {
 		position: absolute;
 		top: 0;
@@ -220,5 +220,5 @@ SPDX-License-Identifier: AGPL-3.0-only
 		height: 1.5rem;
 		aspect-ratio: 1 / 1;
 	}
-	
+
 	</style>
