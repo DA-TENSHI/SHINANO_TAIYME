@@ -32,6 +32,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
 
 RUN corepack enable
 
+COPY --link ./patches/ ./patches/
 COPY --link ./packages/sw/package.json ./packages/sw/
 COPY --link ./packages/misskey-bubble-game/package.json ./packages/misskey-bubble-game/
 COPY --link ./packages/misskey-reversi/package.json ./packages/misskey-reversi/
@@ -93,6 +94,7 @@ RUN corepack enable
 
 WORKDIR /misskey
 
+COPY --link ./patches/ ./patches/
 COPY --link ./scripts/ ./scripts/
 COPY --link ./packages/misskey-bubble-game/package.json ./packages/misskey-bubble-game/
 COPY --link ./packages/misskey-reversi/package.json ./packages/misskey-reversi/
