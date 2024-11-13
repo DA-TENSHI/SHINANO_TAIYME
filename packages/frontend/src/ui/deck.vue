@@ -265,7 +265,6 @@ html,
 body {
 	width: 100%;
 	height: 100%;
-	overflow: hidden; /* fallback (overflow: clip) */
 	overflow: clip;
 	position: fixed;
 	top: 0;
@@ -276,7 +275,6 @@ body {
 #misskey_app {
 	width: 100%;
 	height: 100%;
-	overflow: hidden; /* fallback (overflow: clip) */
 	overflow: clip;
 	position: absolute;
 	top: 0;
@@ -335,7 +333,6 @@ body {
 	flex: 1;
 	display: flex;
 	overflow-x: auto;
-	overflow-y: hidden; // fallback (overflow-y: clip)
 	overflow-y: clip;
 	overscroll-behavior: contain;
 	background: var(--MI_THEME-deckBg);
@@ -456,7 +453,7 @@ body {
 	}
 
 	&:active {
-		background: hsl(from var(--MI_THEME-panel) h s calc(l - 2));
+		background: hsl(from var(--MI_THEME-panel) h s calc(l - (var(--TMS-hsl-base-l) * 2)));
 	}
 }
 
@@ -466,11 +463,11 @@ body {
 	color: var(--MI_THEME-fgOnAccent);
 
 	&:hover {
-		background: linear-gradient(90deg, hsl(from var(--MI_THEME-accent) h s calc(l + 5)), hsl(from var(--MI_THEME-accent) h s calc(l + 5)));
+		background: linear-gradient(90deg, hsl(from var(--MI_THEME-accent) h s calc(l + (var(--TMS-hsl-base-l) * 5))), hsl(from var(--MI_THEME-accent) h s calc(l + (var(--TMS-hsl-base-l) * 5))));
 	}
 
 	&:active {
-		background: linear-gradient(90deg, hsl(from var(--MI_THEME-accent) h s calc(l + 5)), hsl(from var(--MI_THEME-accent) h s calc(l + 5)));
+		background: linear-gradient(90deg, hsl(from var(--MI_THEME-accent) h s calc(l + (var(--TMS-hsl-base-l) * 5))), hsl(from var(--MI_THEME-accent) h s calc(l + (var(--TMS-hsl-base-l) * 5))));
 	}
 }
 

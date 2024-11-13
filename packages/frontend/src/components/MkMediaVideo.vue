@@ -520,7 +520,6 @@ onDeactivated(() => {
 	position: relative;
 	width: 100%;
 	height: 100%;
-	overflow: hidden; // fallback (overflow: clip)
 	overflow: clip;
 	border-radius: var(--mediaList-radius, 8px);
 
@@ -537,18 +536,13 @@ onDeactivated(() => {
 		var(--c) 6px 16px
 	);
 
-	// NOTE: iOS/iPadOS環境でクラッシュする https://github.com/taiyme/misskey/issues/293
-	html[data-browser-engine=webkit] & {
-		background-image: unset !important;
-	}
-
 	&,
 	html[data-color-scheme=light] & {
-		--c: color(from color-mix(in srgb, var(--MI_THEME-bg), black 15%) srgb r g b / 0.25);
+		--c: color-mix(in srgb, #000000 3.75%, var(--MI_THEME-bg));
 	}
 
 	html[data-color-scheme=dark] & {
-		--c: color(from color-mix(in srgb, var(--MI_THEME-bg), white 15%) srgb r g b / 0.5);
+		--c: color-mix(in srgb, #ffffff 7.5%, var(--MI_THEME-bg));
 	}
 }
 

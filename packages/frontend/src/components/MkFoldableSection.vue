@@ -90,7 +90,6 @@ onMounted(() => {
 
 <style lang="scss" module>
 .folderToggleEnterActive, .folderToggleLeaveActive {
-	overflow-y: hidden; // fallback (overflow-y: clip)
 	overflow-y: clip;
 	transition: opacity 0.3s, height 0.3s !important;
 }
@@ -111,7 +110,7 @@ onMounted(() => {
 	top: var(--MI-stickyTop, 0px);
 	-webkit-backdrop-filter: var(--MI-blur, blur(15px));
 	backdrop-filter: var(--MI-blur, blur(15px));
-	background-color: color(from v-bind("parentBg ?? 'var(--MI_THEME-bg)'") srgb r g b / 0.85);
+	background-color: rgb(from v-bind("parentBg ?? 'var(--MI_THEME-bg)'") r g b / 0.85);
 }
 
 .title {

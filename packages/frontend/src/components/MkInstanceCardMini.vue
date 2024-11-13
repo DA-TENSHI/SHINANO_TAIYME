@@ -81,47 +81,42 @@ $bodyInfoHieght: 16px;
 			transparent 0px 10px,
 			var(--c) 6px 16px
 		);
-
-		// NOTE: iOS/iPadOS環境でクラッシュする https://github.com/taiyme/misskey/issues/293
-		html[data-browser-engine=webkit] & {
-			background-image: unset !important;
-		}
 	}
 
 	&,
 	html[data-color-scheme=light] & {
 		&.isNotResponding {
-			--c: color(from color-mix(in srgb, var(--MI_THEME-panel), orange 50%) srgb r g b / 0.25);
+			--c: color-mix(in srgb, #ffa500 12.5%, var(--MI_THEME-panel));
 		}
 
 		&.isSilenced {
-			--c: color(from color-mix(in srgb, var(--MI_THEME-panel), blue 50%) srgb r g b / 0.25);
+			--c: color-mix(in srgb, #0000ff 12.5%, var(--MI_THEME-panel));
 		}
 
 		&.isSuspended {
-			--c: color(from color-mix(in srgb, var(--MI_THEME-panel), black 15%) srgb r g b / 0.25);
+			--c: color-mix(in srgb, #000000 3.75%, var(--MI_THEME-panel));
 		}
 
 		&.isBlocked {
-			--c: color(from color-mix(in srgb, var(--MI_THEME-panel), red 50%) srgb r g b / 0.25);
+			--c: color-mix(in srgb, #ff0000 12.5%, var(--MI_THEME-panel));
 		}
 	}
 
 	html[data-color-scheme=dark] & {
 		&.isNotResponding {
-			--c: color(from color-mix(in srgb, var(--MI_THEME-panel), orange 50%) srgb r g b / 0.5);
+			--c: color-mix(in srgb, #ffa500 25%, var(--MI_THEME-panel));
 		}
 
 		&.isSilenced {
-			--c: color(from color-mix(in srgb, var(--MI_THEME-panel), blue 50%) srgb r g b / 0.5);
+			--c: color-mix(in srgb, #0000ff 25%, var(--MI_THEME-panel));
 		}
 
 		&.isSuspended {
-			--c: color(from color-mix(in srgb, var(--MI_THEME-panel), white 15%) srgb r g b / 0.5);
+			--c: color-mix(in srgb, #ffffff 7.5%, var(--MI_THEME-panel));
 		}
 
 		&.isBlocked {
-			--c: color(from color-mix(in srgb, var(--MI_THEME-panel), red 50%) srgb r g b / 0.5);
+			--c: color-mix(in srgb, #ff0000 25%, var(--MI_THEME-panel));
 		}
 	}
 }

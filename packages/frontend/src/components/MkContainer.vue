@@ -135,7 +135,6 @@ onUnmounted(() => {
 <style lang="scss" module>
 .transition_toggle_enterActive,
 .transition_toggle_leaveActive {
-	overflow-y: hidden; // fallback (overflow-y: clip)
 	overflow-y: clip;
 	transition: opacity 0.5s, height 0.5s !important;
 }
@@ -146,7 +145,6 @@ onUnmounted(() => {
 
 .root {
 	position: relative;
-	overflow: hidden; // fallback (overflow: clip)
 	overflow: clip;
 	contain: content;
 
@@ -219,7 +217,6 @@ onUnmounted(() => {
 	position: relative;
 	min-height: 64px; // .showMoreFade
 	max-height: var(--maxHeight);
-	overflow: hidden; // fallback (overflow: clip)
 	overflow: clip;
 }
 
@@ -231,7 +228,7 @@ onUnmounted(() => {
 	left: 0;
 	width: 100%;
 	height: 64px; // .omitted
-	background: linear-gradient(0deg, var(--MI_THEME-panel), color(from var(--MI_THEME-panel) srgb r g b / 0));
+	background: linear-gradient(0deg, var(--MI_THEME-panel), rgb(from var(--MI_THEME-panel) r g b / 0));
 }
 
 .showMoreFade {

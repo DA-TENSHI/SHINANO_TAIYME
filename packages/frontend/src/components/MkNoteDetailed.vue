@@ -245,8 +245,7 @@ import MkReactionIcon from '@/components/MkReactionIcon.vue';
 import MkButton from '@/components/MkButton.vue';
 import { isEnabledUrlPreview } from '@/instance.js';
 import { type Keymap } from '@/scripts/hotkey.js';
-import { getAppearNote } from '@/scripts/tms/get-appear-note.js';
-import { isQuote, isRenote } from '@/scripts/tms/is-renote.js';
+import { getAppearNote } from '@/scripts/get-appear-note.js';
 
 const props = withDefaults(defineProps<{
 	note: Misskey.entities.Note;
@@ -278,7 +277,7 @@ if (noteViewInterruptors.length > 0) {
 	});
 }
 
-const isRenoted = isRenote(note.value) && !isQuote(note.value);
+const isRenoted = Misskey.note.isPureRenote(note.value);
 
 const rootEl = shallowRef<HTMLElement>();
 const menuButton = shallowRef<HTMLElement>();
@@ -558,7 +557,6 @@ function loadConversation() {
 .root {
 	position: relative;
 	transition: box-shadow 0.1s ease;
-	overflow: hidden; // fallback (overflow: clip)
 	overflow: clip;
 	contain: content;
 
@@ -737,7 +735,6 @@ function loadConversation() {
 	padding: 16px;
 	border: dashed 1px var(--MI_THEME-renote);
 	border-radius: 8px;
-	overflow: hidden; // fallback (overflow: clip)
 	overflow: clip;
 }
 

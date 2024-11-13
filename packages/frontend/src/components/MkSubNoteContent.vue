@@ -55,7 +55,6 @@ const collapsed = ref(isLong);
 	position: relative;
 	min-height: 64px; // .showMoreFade
 	max-height: 9em;
-	overflow: hidden; // fallback (overflow: clip)
 	overflow: clip;
 }
 
@@ -67,7 +66,7 @@ const collapsed = ref(isLong);
 	left: 0;
 	width: 100%;
 	height: 64px; // .collapsed
-	background: linear-gradient(0deg, var(--MI_THEME-panel), color(from var(--MI_THEME-panel) srgb r g b / 0));
+	background: linear-gradient(0deg, var(--MI_THEME-panel), rgb(from var(--MI_THEME-panel) r g b / 0));
 }
 
 .showLessFade {

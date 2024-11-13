@@ -95,7 +95,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 					tabindex="-1"
 					@click.stop="() => {}"
 				>
-					<div :class="$style.controlButton"><span>ALT</span></div>
+					<div :class="$style.controlButton"><span data-testid="alt">ALT</span></div>
 				</button>
 			</div>
 
@@ -107,7 +107,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 					tabindex="-1"
 					@click.stop="() => {}"
 				>
-					<div :class="$style.controlButton"><span>GIF</span></div>
+					<div :class="$style.controlButton"><span data-testid="gif">GIF</span></div>
 				</button>
 				<button
 					v-if="imageRef.isSensitive"
@@ -116,7 +116,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 					tabindex="-1"
 					@click.stop="() => {}"
 				>
-					<div :class="$style.controlButton"><span>NSFW</span></div>
+					<div :class="$style.controlButton"><span data-testid="nsfw">NSFW</span></div>
 				</button>
 			</div>
 		</template>
@@ -202,7 +202,6 @@ const showImageMenu = (ev: MouseEvent) => {
 	position: relative;
 	width: 100%;
 	height: 100%;
-	overflow: hidden; // fallback (overflow: clip)
 	overflow: clip;
 	border-radius: var(--mediaList-radius, 8px);
 
@@ -219,18 +218,13 @@ const showImageMenu = (ev: MouseEvent) => {
 		var(--c) 6px 16px
 	);
 
-	// NOTE: iOS/iPadOS環境でクラッシュする https://github.com/taiyme/misskey/issues/293
-	html[data-browser-engine=webkit] & {
-		background-image: unset !important;
-	}
-
 	&,
 	html[data-color-scheme=light] & {
-		--c: color(from color-mix(in srgb, var(--MI_THEME-bg), black 15%) srgb r g b / 0.25);
+		--c: color-mix(in srgb, #000000 3.75%, var(--MI_THEME-bg));
 	}
 
 	html[data-color-scheme=dark] & {
-		--c: color(from color-mix(in srgb, var(--MI_THEME-bg), white 15%) srgb r g b / 0.5);
+		--c: color-mix(in srgb, #ffffff 7.5%, var(--MI_THEME-bg));
 	}
 }
 

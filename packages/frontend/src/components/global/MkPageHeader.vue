@@ -141,7 +141,7 @@ onUnmounted(() => {
 	backdrop-filter: var(--MI-blur, blur(15px));
 	border-bottom: solid 0.5px var(--MI_THEME-divider);
 	width: 100%;
-	background: color(from var(--MI_THEME-bg) srgb r g b / 0.85);
+	background: rgb(from var(--MI_THEME-bg) r g b / 0.85);
 }
 
 .upper,
@@ -252,7 +252,6 @@ onUnmounted(() => {
 	display: flex;
 	align-items: center;
 	max-width: min(30vw, 400px);
-	overflow: hidden; // fallback (overflow: clip)
 	overflow: clip;
 	white-space: nowrap;
 	text-align: left;
@@ -264,7 +263,6 @@ onUnmounted(() => {
 .titleAvatarContainer {
 	$size: 32px;
 	contain: strict;
-	overflow: hidden; // fallback (overflow: clip)
 	overflow: clip;
 	width: $size;
 	height: $size;

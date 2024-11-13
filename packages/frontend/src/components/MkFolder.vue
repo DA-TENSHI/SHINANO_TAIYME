@@ -122,7 +122,6 @@ onMounted(() => {
 <style lang="scss" module>
 .transition_toggle_enterActive,
 .transition_toggle_leaveActive {
-	overflow-y: hidden; // fallback (overflow-y: clip)
 	overflow-y: clip;
 	transition: opacity 0.3s, height 0.3s, transform 0.3s !important;
 }
@@ -235,10 +234,5 @@ onMounted(() => {
 		transparent 0px 10px,
 		var(--MI_THEME-panel) 6px 16px
 	);
-
-	// NOTE: iOS/iPadOS環境でクラッシュする https://github.com/taiyme/misskey/issues/293
-	html[data-browser-engine=webkit] & {
-		background-image: unset !important;
-	}
 }
 </style>

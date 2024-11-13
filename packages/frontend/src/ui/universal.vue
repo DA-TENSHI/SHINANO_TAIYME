@@ -247,7 +247,6 @@ html,
 body {
 	width: 100%;
 	height: 100%;
-	overflow: hidden; /* fallback (overflow: clip) */
 	overflow: clip;
 	position: fixed;
 	top: 0;
@@ -258,7 +257,6 @@ body {
 #misskey_app {
 	width: 100%;
 	height: 100%;
-	overflow: hidden; /* fallback (overflow: clip) */
 	overflow: clip;
 	position: absolute;
 	top: 0;
@@ -316,7 +314,6 @@ $widgets-hide-threshold: 1090px;
 
 .root {
 	height: 100dvh;
-	overflow: hidden; // fallback (overflow: clip)
 	overflow: clip;
 	contain: strict;
 	box-sizing: border-box;
@@ -428,7 +425,7 @@ $widgets-hide-threshold: 1090px;
 	}
 
 	&:active {
-		background: hsl(from var(--MI_THEME-panel) h s calc(l - 2));
+		background: hsl(from var(--MI_THEME-panel) h s calc(l - (var(--TMS-hsl-base-l) * 2)));
 	}
 }
 
@@ -438,11 +435,11 @@ $widgets-hide-threshold: 1090px;
 	color: var(--MI_THEME-fgOnAccent);
 
 	&:hover {
-		background: linear-gradient(90deg, hsl(from var(--MI_THEME-accent) h s calc(l + 5)), hsl(from var(--MI_THEME-accent) h s calc(l + 5)));
+		background: linear-gradient(90deg, hsl(from var(--MI_THEME-accent) h s calc(l + (var(--TMS-hsl-base-l) * 5))), hsl(from var(--MI_THEME-accent) h s calc(l + (var(--TMS-hsl-base-l) * 5))));
 	}
 
 	&:active {
-		background: linear-gradient(90deg, hsl(from var(--MI_THEME-accent) h s calc(l + 5)), hsl(from var(--MI_THEME-accent) h s calc(l + 5)));
+		background: linear-gradient(90deg, hsl(from var(--MI_THEME-accent) h s calc(l + (var(--TMS-hsl-base-l) * 5))), hsl(from var(--MI_THEME-accent) h s calc(l + (var(--TMS-hsl-base-l) * 5))));
 	}
 }
 

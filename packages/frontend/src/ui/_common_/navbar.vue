@@ -45,6 +45,9 @@ SPDX-License-Identifier: AGPL-3.0-only
 			<MkA v-tooltip.noDelay.right="i18n.ts.settings" :class="$style.item" :activeClass="$style.active" to="/settings">
 				<i :class="$style.itemIcon" class="ti ti-settings ti-fw"></i><span :class="$style.itemText">{{ i18n.ts.settings }}</span>
 			</MkA>
+			<MkA v-tooltip.noDelay.right="i18n.ts._tms.taiymeFeatures" :class="$style.item" :activeClass="$style.active" to="/tms/features">
+				<i :class="$style.itemIcon" class="ti ti-settings-plus ti-fw"></i><span :class="$style.itemText">{{ i18n.ts._tms.taiymeFeatures }}</span>
+			</MkA>
 		</div>
 		<div :class="$style.bottom">
 			<button v-tooltip.noDelay.right="i18n.ts.note" class="_button" :class="[$style.post]" data-cy-open-post-form @click="os.post">
@@ -104,7 +107,7 @@ function more(ev: MouseEvent) {
 .root {
 	--nav-width: 250px;
 	--nav-icon-only-width: 80px;
-	--nav-bg-transparent: color(from var(--MI_THEME-navBg) srgb r g b / 0.5);
+	--nav-bg-transparent: rgb(from var(--MI_THEME-navBg) r g b / 0.5);
 
 	flex: 0 0 var(--nav-width);
 	width: var(--nav-width);
@@ -120,7 +123,6 @@ function more(ev: MouseEvent) {
 	height: 100dvh;
 	box-sizing: border-box;
 	overflow: auto;
-	overflow-x: hidden; // fallback (overflow-x: clip)
 	overflow-x: clip;
 	overscroll-behavior: contain;
 	background: var(--MI_THEME-navBg);

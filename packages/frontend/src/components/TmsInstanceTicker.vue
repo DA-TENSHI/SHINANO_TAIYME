@@ -39,7 +39,6 @@ const tickerStateRef = computed(() => getTickerState(props));
 <style lang="scss" module>
 //#region 共通
 .root {
-	overflow: hidden; // fallback (overflow: clip)
 	overflow: clip;
 	display: block;
 	box-sizing: border-box;
@@ -134,8 +133,8 @@ const tickerStateRef = computed(() => getTickerState(props));
 	background: linear-gradient(
 		var(--ticker-bg-deg),
 		rgba(0, 0, 0, 0) calc(100% - 3em),
-		color(from var(--ticker-bg, #777) srgb r g b / 0.35) calc(100% - 3em),
-		color(from var(--ticker-bg, #777) srgb r g b / 0.35) 100%
+		rgb(from var(--ticker-bg, #777) r g b / 0.35) calc(100% - 3em),
+		rgb(from var(--ticker-bg, #777) r g b / 0.35) 100%
 	);
 	color: #fff;
 	text-shadow: /* 0.866 ≈ sin(60deg) */

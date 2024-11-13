@@ -370,6 +370,13 @@ export class MfmService {
 				return doc.createTextNode(node.props.emoji);
 			},
 
+			rjNumber: (node) => {
+				const a = doc.createElement('a');
+				a.setAttribute('href', node.props.url);
+				a.textContent = node.props.rjNumber;
+				return a;
+			},
+
 			hashtag: (node) => {
 				const a = doc.createElement('a');
 				a.setAttribute('href', `${this.config.url}/tags/${node.props.hashtag}`);

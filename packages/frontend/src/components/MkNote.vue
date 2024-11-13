@@ -208,8 +208,7 @@ import { showMovedDialog } from '@/scripts/show-moved-dialog.js';
 import { isEnabledUrlPreview } from '@/instance.js';
 import { type Keymap } from '@/scripts/hotkey.js';
 import { focusPrev, focusNext } from '@/scripts/focus.js';
-import { getAppearNote } from '@/scripts/tms/get-appear-note.js';
-import { isQuote, isRenote } from '@/scripts/tms/is-renote.js';
+import { getAppearNote } from '@/scripts/get-appear-note.js';
 import { tmsStore } from '@/tms/store.js';
 
 const props = withDefaults(defineProps<{
@@ -253,7 +252,7 @@ if (noteViewInterruptors.length > 0) {
 	});
 }
 
-const isRenoted = isRenote(note.value) && !isQuote(note.value);
+const isRenoted = Misskey.note.isPureRenote(note.value);
 
 const rootEl = shallowRef<HTMLElement>();
 const menuButton = shallowRef<HTMLElement>();
@@ -616,7 +615,6 @@ function emitUpdReaction(emoji: string, delta: number) {
 	position: relative;
 	transition: box-shadow 0.1s ease;
 	font-size: 1.05em;
-	overflow: hidden; // fallback (overflow: clip)
 	overflow: clip;
 	contain: content;
 
@@ -819,7 +817,6 @@ function emitUpdReaction(emoji: string, delta: number) {
 	position: relative;
 	min-height: 64px; // .showMoreFade
 	max-height: 9em;
-	overflow: hidden; // fallback (overflow: clip)
 	overflow: clip;
 }
 
@@ -831,7 +828,7 @@ function emitUpdReaction(emoji: string, delta: number) {
 	left: 0;
 	width: 100%;
 	height: 64px; // .contentCollapsed
-	background: linear-gradient(0deg, var(--MI_THEME-panel), color(from var(--MI_THEME-panel) srgb r g b / 0));
+	background: linear-gradient(0deg, var(--MI_THEME-panel), rgb(from var(--MI_THEME-panel) r g b / 0));
 }
 
 .showLessFade {
@@ -893,7 +890,6 @@ function emitUpdReaction(emoji: string, delta: number) {
 	padding: 16px;
 	border: dashed 1px var(--MI_THEME-renote);
 	border-radius: 8px;
-	overflow: hidden; // fallback (overflow: clip)
 	overflow: clip;
 }
 
