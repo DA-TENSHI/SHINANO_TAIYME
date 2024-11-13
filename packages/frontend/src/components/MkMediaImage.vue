@@ -95,7 +95,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 					tabindex="-1"
 					@click.stop="() => {}"
 				>
-					<div :class="$style.controlButton"><span>ALT</span></div>
+					<div :class="$style.controlButton"><span data-testid="alt">ALT</span></div>
 				</button>
 			</div>
 
@@ -107,7 +107,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 					tabindex="-1"
 					@click.stop="() => {}"
 				>
-					<div :class="$style.controlButton"><span>GIF</span></div>
+					<div :class="$style.controlButton"><span data-testid="gif">GIF</span></div>
 				</button>
 				<button
 					v-if="imageRef.isSensitive"
@@ -116,7 +116,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 					tabindex="-1"
 					@click.stop="() => {}"
 				>
-					<div :class="$style.controlButton"><span>NSFW</span></div>
+					<div :class="$style.controlButton"><span data-testid="nsfw">NSFW</span></div>
 				</button>
 			</div>
 		</template>
